@@ -14,6 +14,7 @@ FetchContent_MakeAvailable(JUCE)
 
 juce_add_plugin(LaPautaSLChannel
     COMPANY_NAME "La Pauta"
+    BUNDLE_ID com.lapauta.slchannel
     IS_SYNTH FALSE
     NEEDS_MIDI_INPUT FALSE
     NEEDS_MIDI_OUTPUT FALSE
@@ -21,11 +22,11 @@ juce_add_plugin(LaPautaSLChannel
     PLUGIN_CODE LpSl
     FORMATS Standalone VST3
     PRODUCT_NAME "La Pauta SL Channel"
-    COPY_PLUGIN_AFTER_BUILD TRUE)
+    COPY_PLUGIN_AFTER_BUILD FALSE)
 
 target_sources(LaPautaSLChannel PRIVATE
-    PluginProcessor.cpp
-    PluginEditor.cpp)
+    Saurce/PluginProcessor.cpp
+    Saurce/PluginEditor.cpp)
 
 target_compile_definitions(LaPautaSLChannel PUBLIC
     JUCE_WEB_BROWSER=0
