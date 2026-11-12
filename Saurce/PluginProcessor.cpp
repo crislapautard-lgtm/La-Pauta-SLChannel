@@ -17,8 +17,29 @@ AudioProcessorValueTreeState::ParameterLayout LaPautaSLChannelAudioProcessor::cr
 
     auto addF = [&] (const char* id, const char* name, NormalisableRange<float> r, float def, const char* unit)
     {
+        const String u (unit);
+
+        auto toText = [u] (float v, int) -> String
+        {
+            if (u == "Hz")  return v >= 1000.f ? String (v / 1000.f, 2) + " kHz"
+                                               : String (roundToInt (v)) + " Hz";
+            if (u == "dB")  return String (v, 1) + " dB";
+            if (u == "s")   return String (v, 2) + " s";
+            if (u == ":1")  return String (v, 1) + " : 1";
+            return String (v, 2);
+        };
+
+        auto fromText = [] (const String& t) -> float
+        {
+            const float v = t.getFloatValue();
+            return t.containsIgnoreCase ("k") ? v * 1000.f : v;
+        };
+
         layout.add (std::make_unique<AudioParameterFloat> (ParameterID { id, 1 }, name, r, def,
-                                                           AudioParameterFloatAttributes().withLabel (unit)));
+                        AudioParameterFloatAttributes()
+                            .withLabel (unit)
+                            .withStringFromValueFunction (toText)
+                            .withValueFromStringFunction (fromText)));
     };
     auto addB = [&] (const char* id, const char* name, bool def = false)
     {
